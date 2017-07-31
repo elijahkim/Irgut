@@ -19,17 +19,29 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
-
 import React from "react"
 import ReactDOM from "react-dom"
+import CodeMirror from "react-codemirror"
 
 class HelloWorld extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {code: "// Code"}
+  }
+
+  updateCode(newCode) {
+    this.setState({
+        code: newCode,
+    });
+  }
+
   render() {
-    return (<h1>Hello World!</h1>)
+    var options = { lineNumbers: true };
+    return <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
   }
 }
 
 ReactDOM.render(
   <HelloWorld/>,
-  document.getElementById("hello-world")
+  document.getElementById("irgut")
 )

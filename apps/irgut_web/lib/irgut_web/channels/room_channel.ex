@@ -1,4 +1,4 @@
-defmodule Chat.RoomChannel do
+defmodule IrgutWeb.RoomChannel do
   use Phoenix.Channel
   require Logger
 
@@ -9,23 +9,19 @@ defmodule Chat.RoomChannel do
   `:ignore` to deny subscription/broadcast on this channel
   for the requested topic
   """
-  def join("rooms:lobby", message, socket) do
+  def join("room:lobby", message, socket) do
     Process.flag(:trap_exit, true)
-    :timer.send_interval(5000, :ping)
-    send(self, {:after_join, message})
+    :timer.send_interval(1000, :ping)
+
+    IO.inspect "HIHIHIHIHIHIHIHI"
 
     {:ok, socket}
   end
 
-  def join("rooms:" <> _private_subtopic, _message, _socket) do
+  def join("room:" <> _private_subtopic, _message, _socket) do
     {:error, %{reason: "unauthorized"}}
   end
 
-  def handle_info({:after_join, msg}, socket) do
-    broadcast! socket, "user:entered", %{user: msg["user"]}
-    push socket, "join", %{status: "connected"}
-    {:noreply, socket}
-  end
   def handle_info(:ping, socket) do
     push socket, "new:msg", %{user: "SYSTEM", body: "ping"}
     {:noreply, socket}

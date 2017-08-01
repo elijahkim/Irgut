@@ -12,6 +12,7 @@
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
+import {Socket, LongPoller} from "phoenix"
 
 // Import local files
 //
@@ -29,6 +30,22 @@ class HelloWorld extends React.Component {
     super(props);
     this.state = {code: "// Code"}
     this.updateCode = this.updateCode.bind(this)
+  }
+
+  componentDidMount() {
+    let socket = new Socket("/socket", {
+      logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
+    })
+
+    socket.connect({user_id: "123"})
+    let channel = socket.channel("room:lobby")
+    channel.join()
+      .receive("ok", resp => { console.log("Joined successfully", resp) })
+      .receive("error", resp => { console.log("Unable to join", resp) })
+
+    channel.on("new:msg", msg => {
+      console.log("Ping")
+    })
   }
 
   updateCode(newCode) {

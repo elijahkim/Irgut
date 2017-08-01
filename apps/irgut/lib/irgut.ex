@@ -7,15 +7,7 @@ defmodule Irgut do
   if it comes from the database, an external API or others.
   """
 
-  def evaluate(code_string) do
-    try do
-      {result, binding} =
-        code_string
-        |> Code.eval_string
-
-      result
-    rescue
-      exception -> Exception.message(exception)
-    end
+  def evaluate(code) do
+    GenServer.call(Irgut.Server, {:evaluate, code})
   end
 end

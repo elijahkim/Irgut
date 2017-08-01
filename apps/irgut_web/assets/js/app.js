@@ -31,7 +31,7 @@ class HelloWorld extends React.Component {
     super(props);
     this.channel;
     this.state = {
-      code: "# code",
+      code: "foo = fn -> IO.inspect \"HELLO\" end",
       return: "",
     }
     this.updateCode = this.updateCode.bind(this)

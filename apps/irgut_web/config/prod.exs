@@ -15,8 +15,10 @@ use Mix.Config
 # which you typically run after static files are built.
 config :irgut_web, IrgutWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [port: {:system, "PORT"}],
+  url: [scheme: "https", host: "irgut.herokuapp.com", port: 443],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
 
 # ## SSL Support
 #
@@ -58,4 +60,3 @@ config :irgut_web, IrgutWeb.Endpoint,
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"

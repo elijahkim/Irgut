@@ -22,7 +22,7 @@ import {Socket, LongPoller} from "phoenix"
 // import socket from "./socket"
 import React from "react"
 import ReactDOM from "react-dom"
-import CodeMirror from "react-codemirror"
+import CodeMirror from 'react-codemirror2'
 import Return from "./components/Return"
 
 class HelloWorld extends React.Component {
@@ -52,6 +52,7 @@ class HelloWorld extends React.Component {
     })
 
     this.channel.on("editor:updated", msg => {
+      console.log(`updated, ${msg.body}`)
       this.setState({code: msg.body})
     })
   }
@@ -68,10 +69,16 @@ class HelloWorld extends React.Component {
 
   render() {
     var options = { lineNumbers: true };
+    let { code } = this.state;
+    console.log(this.state)
     return (
       <div className="container">
         <div className="editor">
-          <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+          <CodeMirror
+            value={this.state.code}
+            onValueChange={(editor, metadata, newCode) => this.updateCode(newCode)}
+            options={options}
+          />
           <button onClick={() => this.handleButtonClick()}>
             Run
           </button>

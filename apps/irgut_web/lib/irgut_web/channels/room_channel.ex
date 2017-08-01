@@ -15,13 +15,8 @@ defmodule IrgutWeb.RoomChannel do
     {:ok, socket}
   end
 
-  def join("room:" <> _private_subtopic, _message, _socket) do
-    {:error, %{reason: "unauthorized"}}
-  end
-
-  def handle_info(:ping, socket) do
-    push socket, "new:msg", %{user: "SYSTEM", body: "ping"}
-    {:noreply, socket}
+  def join("room:" <> private_subtopic, _message, socket) do
+    {:ok, socket}
   end
 
   def terminate(reason, _socket) do
@@ -37,12 +32,7 @@ defmodule IrgutWeb.RoomChannel do
   def handle_in("editor:evaluate", %{"code" => code}, socket) do
     result = Irgut.evaluate(code)
 
-    broadcast(socket, "editor:return", %{"body" => result})
+    broadcast(socket, "editor:return", %{body: result})
     {:noreply, socket}
-  end
-
-  def handle_in("new:msg", msg, socket) do
-    broadcast! socket, "new:msg", %{user: msg["user"], body: msg["body"]}
-    {:reply, {:ok, %{msg: msg["body"]}}, assign(socket, :user, msg["user"])}
   end
 end

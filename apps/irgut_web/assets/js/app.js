@@ -31,7 +31,7 @@ class HelloWorld extends React.Component {
     super(props);
     this.channel;
     this.state = {
-      code: "foo = fn -> IO.inspect \"HELLO\" end",
+      code: "#Enter your Elixir code",
       return: "",
     }
     this.updateCode = this.updateCode.bind(this)
@@ -43,8 +43,10 @@ class HelloWorld extends React.Component {
       logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
     })
 
+    const roomId = window.location.href.split("/")[4]
+
     socket.connect({user_id: "123"})
-    this.channel = socket.channel("room:lobby")
+    this.channel = socket.channel(`room:${roomId}`)
     this.channel.join()
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) })

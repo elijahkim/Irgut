@@ -46,10 +46,8 @@ class HelloWorld extends React.Component {
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) })
 
-    this.channel.on("new:msg", msg => {})
-
     this.channel.on("editor:return", msg => {
-      this.setState({return: msg})
+      this.setState({return: msg.body})
     })
 
     this.channel.on("editor:updated", msg => {
@@ -61,9 +59,27 @@ class HelloWorld extends React.Component {
     this.channel.push("editor:update", {code: newCode})
   }
 
+  handleButtonClick() {
+    const { code } = this.state;
+
+    this.channel.push("editor:evaluate", {code: code});
+  }
+
   render() {
     var options = { lineNumbers: true };
-    return <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+    return (
+      <div>
+        <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+        <button onClick={() => this.handleButtonClick()}>
+          Run
+        </button>
+        <div>
+          <p>
+            { this.state.return }
+          </p>
+        </div>
+      </div>
+    )
   }
 }
 

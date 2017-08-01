@@ -11,7 +11,6 @@ defmodule IrgutWeb.RoomChannel do
   """
   def join("room:lobby", message, socket) do
     Process.flag(:trap_exit, true)
-    :timer.send_interval(1000, :ping)
 
     {:ok, socket}
   end
@@ -35,9 +34,16 @@ defmodule IrgutWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_in("editor:evaluate", %{"code" => code}, socket) do
+    {res, _} = Irgut.evaluate(code)
+    IO.inspect res
+
+    broadcast(socket, "editor:return", %{"body" => res})
+    {:noreply, socket}
+  end
+
   def handle_in("new:msg", msg, socket) do
     broadcast! socket, "new:msg", %{user: msg["user"], body: msg["body"]}
     {:reply, {:ok, %{msg: msg["body"]}}, assign(socket, :user, msg["user"])}
   end
-
 end

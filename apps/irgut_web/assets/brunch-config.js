@@ -19,7 +19,9 @@ exports.config = {
       //   ]
       // }
     },
-    stylesheets: {joinTo: 'app.css'},
+    stylesheets: {
+      joinTo: "css/app.css"
+    },
     templates: {
       joinTo: "js/app.js"
     }

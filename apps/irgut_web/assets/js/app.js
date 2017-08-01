@@ -28,7 +28,10 @@ import 'codemirror/lib/codemirror'
 class HelloWorld extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {code: "// Code"}
+    this.state = {
+      code: "// Code",
+      return: "",
+    }
     this.updateCode = this.updateCode.bind(this)
   }
 
@@ -45,6 +48,9 @@ class HelloWorld extends React.Component {
 
     channel.on("new:msg", msg => {
       console.log("Ping")
+    })
+    channel.on("editor:return", msg => {
+      this.setState({return: msg})
     })
   }
 

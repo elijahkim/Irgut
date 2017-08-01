@@ -35,9 +35,9 @@ defmodule IrgutWeb.RoomChannel do
   end
 
   def handle_in("editor:evaluate", %{"code" => code}, socket) do
-    {res, _} = Irgut.evaluate(code)
+    result = Irgut.evaluate(code)
 
-    broadcast(socket, "editor:return", %{"body" => res})
+    broadcast(socket, "editor:return", %{"body" => result})
     {:noreply, socket}
   end
 

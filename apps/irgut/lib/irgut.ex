@@ -12,8 +12,10 @@ defmodule Irgut do
       {result, binding} =
         code_string
         |> Code.eval_string
+
+      result
     rescue
-      exception -> IO.inspect Exception.message(exception)
+      exception -> Exception.message(exception)
     end
   end
 end

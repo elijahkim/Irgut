@@ -37,7 +37,7 @@ exports.config = {
   // Phoenix paths configuration
   paths: {
     // Dependencies and current project directories to watch
-    watched: ["static", "css", "js", "vendor"],
+    watched: ["static", "css", "js", "vendor", "scss"],
     // Where to compile files to
     public: "../priv/static"
   },
@@ -49,7 +49,10 @@ exports.config = {
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
     },
-
+    sass: {
+      options: {
+      }
+    }
   },
 
   modules: {

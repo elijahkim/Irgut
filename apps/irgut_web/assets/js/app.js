@@ -24,16 +24,18 @@ import React from "react"
 import ReactDOM from "react-dom"
 import CodeMirror from 'react-codemirror2'
 import Return from "./components/Return"
+import 'codemirror-mode-elixir'
 
 class HelloWorld extends React.Component {
   constructor(props) {
     super(props);
     this.channel;
     this.state = {
-      code: "// Code",
+      code: "# code",
       return: "",
     }
     this.updateCode = this.updateCode.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   componentDidMount() {
@@ -52,7 +54,6 @@ class HelloWorld extends React.Component {
     })
 
     this.channel.on("editor:updated", msg => {
-      console.log(`updated, ${msg.body}`)
       this.setState({code: msg.body})
     })
   }
@@ -63,21 +64,30 @@ class HelloWorld extends React.Component {
 
   handleButtonClick() {
     const { code } = this.state;
-
     this.channel.push("editor:evaluate", {code: code});
   }
 
+  handleKeyPress(event) {
+    if(event.key === "Enter" && event.metaKey) {
+      this.handleButtonClick();
+    }
+  }
+
   render() {
-    var options = { lineNumbers: true };
     let { code } = this.state;
-    console.log(this.state)
+
     return (
-      <div className="container">
+      <div className="container" onKeyDown={this.handleKeyPress}>
         <div className="editor">
           <CodeMirror
             value={this.state.code}
             onValueChange={(editor, metadata, newCode) => this.updateCode(newCode)}
-            options={options}
+            options={{
+              lineNumbers: true,
+              smartIndent: true,
+              tabSize: 2,
+              mode: "elixir",
+            }}
           />
           <button onClick={() => this.handleButtonClick()}>
             Run

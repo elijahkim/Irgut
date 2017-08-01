@@ -23,11 +23,11 @@ import {Socket, LongPoller} from "phoenix"
 import React from "react"
 import ReactDOM from "react-dom"
 import CodeMirror from "react-codemirror"
-import 'codemirror/lib/codemirror'
 
 class HelloWorld extends React.Component {
   constructor(props) {
     super(props);
+    this.channel;
     this.state = {
       code: "// Code",
       return: "",
@@ -41,21 +41,26 @@ class HelloWorld extends React.Component {
     })
 
     socket.connect({user_id: "123"})
-    let channel = socket.channel("room:lobby")
-    channel.join()
+    this.channel = socket.channel("room:lobby")
+    this.channel.join()
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) })
 
-    channel.on("new:msg", msg => {
+    this.channel.on("new:msg", msg => {
       console.log("Ping")
     })
-    channel.on("editor:return", msg => {
+
+    this.channel.on("editor:return", msg => {
       this.setState({return: msg})
+    })
+
+    this.channel.on("editor:updated", msg => {
+      this.setState({code: newCode})
     })
   }
 
   updateCode(newCode) {
-    this.setState({ code: newCode });
+    this.channel.push("editor:update", {code: newCode})
   }
 
   render() {

@@ -32,8 +32,13 @@ defmodule IrgutWeb.RoomChannel do
     :ok
   end
 
+  def handle_in("editor:update", %{"code" => code}, socket) do
+    IO.inspect code
+  end
+
   def handle_in("new:msg", msg, socket) do
     broadcast! socket, "new:msg", %{user: msg["user"], body: msg["body"]}
     {:reply, {:ok, %{msg: msg["body"]}}, assign(socket, :user, msg["user"])}
   end
+
 end

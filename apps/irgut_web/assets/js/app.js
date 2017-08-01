@@ -46,16 +46,14 @@ class HelloWorld extends React.Component {
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) })
 
-    this.channel.on("new:msg", msg => {
-      console.log("Ping")
-    })
+    this.channel.on("new:msg", msg => {})
 
     this.channel.on("editor:return", msg => {
       this.setState({return: msg})
     })
 
     this.channel.on("editor:updated", msg => {
-      this.setState({code: newCode})
+      this.setState({code: msg.body})
     })
   }
 

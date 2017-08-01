@@ -13,8 +13,6 @@ defmodule IrgutWeb.RoomChannel do
     Process.flag(:trap_exit, true)
     :timer.send_interval(1000, :ping)
 
-    IO.inspect "HIHIHIHIHIHIHIHI"
-
     {:ok, socket}
   end
 
@@ -33,7 +31,8 @@ defmodule IrgutWeb.RoomChannel do
   end
 
   def handle_in("editor:update", %{"code" => code}, socket) do
-    IO.inspect code
+    broadcast! socket, "editor:updated", %{body: code}
+    {:noreply, socket}
   end
 
   def handle_in("new:msg", msg, socket) do

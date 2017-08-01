@@ -23,6 +23,7 @@ import {Socket, LongPoller} from "phoenix"
 import React from "react"
 import ReactDOM from "react-dom"
 import CodeMirror from "react-codemirror"
+import Return from "./components/Return"
 
 class HelloWorld extends React.Component {
   constructor(props) {
@@ -68,16 +69,14 @@ class HelloWorld extends React.Component {
   render() {
     var options = { lineNumbers: true };
     return (
-      <div>
-        <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
-        <button onClick={() => this.handleButtonClick()}>
-          Run
-        </button>
-        <div>
-          <p>
-            { this.state.return }
-          </p>
+      <div className="container">
+        <div className="editor">
+          <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+          <button onClick={() => this.handleButtonClick()}>
+            Run
+          </button>
         </div>
+        <Return body={this.state.return} />
       </div>
     )
   }

@@ -22,17 +22,17 @@ import "phoenix_html"
 import React from "react"
 import ReactDOM from "react-dom"
 import CodeMirror from "react-codemirror"
+import 'codemirror/lib/codemirror'
 
 class HelloWorld extends React.Component {
   constructor(props) {
     super(props);
     this.state = {code: "// Code"}
+    this.updateCode = this.updateCode.bind(this)
   }
 
   updateCode(newCode) {
-    this.setState({
-        code: newCode,
-    });
+    this.setState({ code: newCode });
   }
 
   render() {
